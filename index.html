@@ -1,0 +1,37 @@
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="página html5">
+        <link rel="icon" href="favicon.ico">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+        <title>Cálculo de Impostos</title>
+    </head>
+    <body>
+        <main>
+            <h1>Programa - Cálculo de Impostos</h1>
+            <p>Ao digitar o valor, utilize o "." (ponto) para os centavos e não a "," (vírgula)</p>
+
+           <h2>Valor: R$
+               <input type="number" id="inValor" placeholder="5500.50">Dependentes:
+               <input type="number" min="0" max="10" id="inDependente" placeholder="3">
+               <input type="button" value="Calcular Impostos" id="btCalcularImpostos">
+           </h2>
+
+           <h2>
+           </h2>
+           
+           <h3 id="outValorInss"></h3>
+           <h3 id="outValorIr"></h3>
+           <h3 id="outFgts"></h3>
+           <h3 id="outValorLiq"></h3>
+        </main>
+
+        <footer>
+            <p>&copy;Desenvolvido por Carlos Alexandre Junior</p>
+        </footer>
+    
+    <script src="js/inss.js"></script>
+    </body>
+</html>

@@ -1,0 +1,46 @@
+body {
+    margin: 0;
+    padding: 0;    
+}
+
+h1 {
+   color: blue;
+   text-align: center;
+   margin: 0;
+}
+
+main {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   position: relative;
+   top: 0;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   background-color: #d3d3d3;
+   margin: 5rem;
+   border-radius: 12px;
+}
+
+#outValorInss{
+    color: rgba(255, 0, 0, 0.807);
+}
+#outValorIr{
+    color: rgb(146, 107, 10);
+}
+#outFgts{
+    color:rgb(0, 64, 255);
+}
+#outValorLiq{
+    color: rgb(16, 140, 16);
+}
+
+footer p {
+    text-align: center;
+    background-color: black;
+    color: aliceblue;
+    padding: 3px;
+    margin: 0;
+}
