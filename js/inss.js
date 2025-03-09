@@ -93,7 +93,7 @@ function calcularIrrf() {
     }
 
     if (dependente < 0 && dependente > 10){
-        alert("A quantidade de dependentes não pode ser negativa ou maior que 10.");
+        alert("A quantidade de dependentes não pode ser negativa ou maior que 10!");
         inDependente.value = 0;
         inValor.value = "";
         inDependente.focus();
