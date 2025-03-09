@@ -26,17 +26,18 @@ function calcularInss() {
     var valor = Number(inValor.value);
     
 
-    //Forçar usuário a digitar um valor número válido
+    //Forçar usuário a digitar um valor numérico válido
     if (isNaN(valor) || valor == "" || valor <= 0) {
-        alert("Digite um valor válido para calcular o INSS.");
+        alert("Digite um valor válido para calcular a sua remuneração.");
         inValor.focus();
         inValor.value = "";
+        outCalculo.value = "";
         return;
     }
 
     var inss = 0;
     
-    // Faixa de contribuição do INSS
+    // Condições para o cálculo do INSS
     if (valor > 0 && valor <= inssFaixa1) {
         inss = valor * aliqFaixa1;
         outValorInss.textContent = "INSS: R$ " + inss.toFixed(2);
@@ -63,10 +64,11 @@ function calcularIrrf() {
     var inValor = document.getElementById("inValor");
     var valorIr = parseFloat(inValor.value);  // Obtém o valor do salário para cálculo do IRRF
     let inss = calcularInss(); //Number(document.getElementById("outCalculo").textContent.replace("INSS: R$ ", "").replace(" (teto máximo)", "")); // Pega o INSS calculado
-    var outDescIr = document.getElementById("outDescIr");
+    //var outDescIr = document.getElementById("outDescIr");
     var valorLiq = document.getElementById("valorLiq");
     var outValorLiq = document.getElementById("outValorLiq");
     var inDependente = document.getElementById("inDependente");
+    var outValorInss = document.getElementById("outValorInss");
 
     // Faixas e Alíquotas de IRRF.
 
@@ -90,16 +92,30 @@ function calcularIrrf() {
         deducao = (inss + dependente);
     }
 
-    var novoValor = valorIr - deducao;
+    if (dependente < 0 && dependente > 10){
+        alert("A quantidade de dependentes não pode ser negativa ou maior que 10.");
+        inDependente.value = 0;
+        inValor.value = "";
+        inDependente.focus();
+        outValorInss.textContent = "";
+        outValorIr.textContent = "";
+        outFgts.textContent = "";
+        outValorLiq.textContent = "";
+        return;
+    } else {
+        dependente = dependente;
+    }
 
-    if (novoValor < tabelaIrFaixa0) {
-        outValorIr.textContent = "Você não tem valor suficiente para cálculo de IR.";
+    var novoValor = (valorIr - deducao);
+
+    if (novoValor <= tabelaIrFaixa0) {
+        outValorIr.textContent = "Você não teve desconto de IRRF";
         valorLiq = valorIr - inss - irrf;
         outValorLiq.textContent = "Sua remuneração líquida é: R$ " + valorLiq.toFixed(2);
     } else if (novoValor >= tabelaIrFaixa0 + 0.01 && novoValor <= tabelaIrFaixa1) {
         irrf = ((valorIr - deducao) * 0.075) - faixaUmIr;
         if (irrf < 0){
-            outValorIr.textContent = "Você não tem desconto de IRRF";
+            outValorIr.textContent = "Você não teve desconto de IRRF";
             valorLiq = valorIr - inss - irrf;
             outValorLiq.textContent = "Sua remuneração líquida é: R$ " + valorLiq.toFixed(2);
         } else {

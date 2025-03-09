@@ -15,6 +15,14 @@ h1 {
     font-size: 2rem;
 }
 
+main h2 {
+    margin: 0;
+}
+
+main h3 {
+    margin: 0;
+}
+
 main {
     display: flex;
     flex-direction: column;
