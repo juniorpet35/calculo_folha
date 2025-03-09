@@ -83,16 +83,17 @@ function calcularIrrf() {
     var faixaTresIr = 662.77;
     var faixaQuatroIr = 896.00;
 
-    var dependente = parseInt(inDependente.value) * 189.59;
+    var qtDependente = 0;
+    var vlDependente = qtDependente * 189.59;
 
     var deducao = 0;
-    if ((inss + dependente) < 564.80){
+    if ((inss + vlDependente) < 564.80){
         deducao = 564.80;
     }else {
-        deducao = (inss + dependente);
+        deducao = (inss + vlDependente);
     }
 
-    if (dependente < 0 && dependente > 10){
+    if (qtDependente < 0 && qtDependente > 10){
         alert("A quantidade de dependentes não pode ser negativa ou maior que 10!");
         inDependente.value = 0;
         inValor.value = "";
@@ -103,16 +104,22 @@ function calcularIrrf() {
         outValorLiq.textContent = "";
         return;
     } else {
-        dependente = dependente;
+        dependente = inDependente.value;
     }
 
-    var novoValor = (valorIr - deducao);
+    var novoValor = (inValor.value - deducao);
+
+    /*if(inValor.value < tabelaIrFaixa0){
+        outValorIr.textContent = "Você não teve desconto de IRRF";
+        valorLiq = (valorIr - inss - irrf);
+        outValorLiq.textContent = "Sua remuneração líquida é: R$ " + valorLiq.toFixed(2);
+    }*/
 
     if (novoValor <= tabelaIrFaixa0) {
         outValorIr.textContent = "Você não teve desconto de IRRF";
-        valorLiq = valorIr - inss - irrf;
+        valorLiq = (valorIr - inss - irrf);
         outValorLiq.textContent = "Sua remuneração líquida é: R$ " + valorLiq.toFixed(2);
-    } else if (novoValor >= tabelaIrFaixa0 + 0.01 && novoValor <= tabelaIrFaixa1) {
+    } else if (novoValor >= (tabelaIrFaixa0 + 0.01) && novoValor <= tabelaIrFaixa1) {
         irrf = ((valorIr - deducao) * 0.075) - faixaUmIr;
         if (irrf < 0){
             outValorIr.textContent = "Você não teve desconto de IRRF";
