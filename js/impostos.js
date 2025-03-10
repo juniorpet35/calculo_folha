@@ -93,7 +93,7 @@ function calcularIrrf() {
         deducao = (inss + vlDependente);
     }
 
-    if (qtDependente < 0 && qtDependente > 10){
+    if (inDependente.value < 0 || inDependente.value > 10){
         alert("A quantidade de dependentes não pode ser negativa ou maior que 10!");
         inDependente.value = 0;
         inValor.value = "";
@@ -180,6 +180,9 @@ function calcularImpostos(){
     calcularInss();
     calcularIrrf();
     calcularFgts();
+    inValor.value = "";
+    inDependente.value = "";
+    inValor.focus();
 }
 
 var btCalcularImpostos = document.getElementById("btCalcularImpostos");
