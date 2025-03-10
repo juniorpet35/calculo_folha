@@ -83,7 +83,7 @@ function calcularIrrf() {
     var faixaTresIr = 662.77;
     var faixaQuatroIr = 896.00;
 
-    var qtDependente = 0;
+    var qtDependente = inDependente.value;
     var vlDependente = qtDependente * 189.59;
 
     var deducao = 0;
@@ -103,9 +103,9 @@ function calcularIrrf() {
         outFgts.textContent = "";
         outValorLiq.textContent = "";
         return;
-    } else {
-        dependente = inDependente.value;
-    }
+    } /*else {
+        qtDependente = inDependente.value;
+    }*/
 
     var novoValor = (inValor.value - deducao);
 
