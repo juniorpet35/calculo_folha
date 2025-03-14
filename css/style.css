@@ -9,8 +9,7 @@ body {
   background-color: #f0f4f8;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  padding: 20px; /* Padding reduzido e uniforme */
+  padding: 20px; /* Mantém um padding geral */
 }
 
 main {
@@ -20,7 +19,7 @@ main {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 500px;
-  margin: 20px auto 0; /* Adicionei margem superior leve */
+  margin: 0 auto; /* Centraliza horizontalmente */
 }
 
 h1 {
@@ -96,7 +95,7 @@ footer {
   padding: 10px;
   font-size: 12px;
   color: #7f8c8d;
-  margin-top: auto; /* Empurra o footer para o fundo */
+  margin-top: 20px; /* Espaço fixo acima do footer */
 }
 
 @media (max-width: 480px) {
@@ -107,7 +106,7 @@ footer {
   main {
     padding: 15px;
     max-width: 100%;
-    margin: 10px auto 0; /* Margem menor em telas pequenas */
+    margin: 0 auto;
   }
 
   h1 {
