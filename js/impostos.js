@@ -219,7 +219,7 @@ function irrf2025() {
         return irrfValor;
     }
 
-    function irrf() {
+function irrf() {
         const data = dataReferencia(); // Captura a data selecionada
         const outValorIr = document.getElementById("outValorIr"); // Elemento para exibir resultado
     
@@ -245,6 +245,8 @@ function irrf2025() {
         } else {
             console.error("Elemento 'outValorIr' não encontrado na DOM.");
         }
+
+        return irrfValor;
     }
 
 function calcularFgts(){
@@ -265,6 +267,18 @@ function calcularFgts(){
     //retorna valor do FGTS para a função de cálculo de impostos.
     return fgts;
 }
+function valorLiq(){
+    let irrfValor = irrf();
+    let inss = calcularInss();
+    let inValor = document.getElementById("inValor");
+    let outValorLiq = document.getElementById("outValorLiq");
+    let valor = Number(inValor.value);
+    let valorLiquido = valor - irrfValor - inss;
+
+    outValorLiq.textContent = "Remuneração Líquida: " + valorLiquido.toFixed(2);
+
+    return valorLiquido;
+}
 
 function calcularImpostos() {
     // Valida a data antes de continuar
@@ -277,6 +291,7 @@ function calcularImpostos() {
     calcularInss();
     irrf();
     calcularFgts();
+    valorLiq();
 
     // Limpa os campos de entrada para nova utilização
     inValor.value = "";
