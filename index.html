@@ -13,19 +13,26 @@
             <h1>Programa - Cálculo de Impostos</h1>
             <p>Ao digitar o valor, utilize o "." (ponto) para os centavos e não a "," (vírgula)</p>
 
+            <div>
+                <h2 for="dataReferencia">Selecione uma data:</h2>
+                <input type="date" id="dataReferencia">
+                <h3 class="outErro"></h3>
+            </div>
+
            <h2>
                 Salário: R$
-                <input type="number" id="inValor" placeholder="5500.50">
+                <input type="number" id="inValor" placeholder="Ex: 5500.50">
             </h2>
+            <h3 class="outErro" id="erroRemuneracao"></h3>
             <h2>
                 Dependentes:
-                <input type="number" min="0" max="10" id="inDependente" placeholder="3">
+                <input type="number" min="0" max="10" id="inDependente" placeholder="Ex: 3">
             </h2>
             <p id="btn">
                 <input type="button" value="Calcular Impostos" id="btCalcularImpostos">
             </p>
            
-           <h3 id="outValorInss"></h3>
+           <h3 id="outInss"></h3>
            <h3 id="outValorIr"></h3>
            <h3 id="outFgts"></h3>
            <h3 id="outValorLiq"></h3>

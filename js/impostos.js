@@ -1,92 +1,116 @@
+document.addEventListener("DOMContentLoaded", function () {
+    const inputDataReferencia = document.getElementById("dataReferencia");
+
+    if (inputDataReferencia) {
+        const hoje = new Date();
+        const ano = hoje.getFullYear();
+        const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+        const dia = String(hoje.getDate()).padStart(2, '0');
+
+        inputDataReferencia.value = `${ano}-${mes}-${dia}`;
+    }
+});
+
+
+function dataReferencia() {
+    const inputDataReferencia = document.getElementById("dataReferencia");
+    const outErro = document.querySelector(".outErro");
+
+    // Verifica se o elemento existe
+    if (!inputDataReferencia) {
+        console.error("Elemento 'dataReferencia' não encontrado.");
+        return null;
+    }
+
+    // Captura o valor do input diretamente (sem ajustes)
+    const dataSelecionada = new Date(inputDataReferencia.value);
+
+    // Valida se a data é válida
+    if (isNaN(dataSelecionada.getTime())) {
+        outErro.textContent = "Por favor, selecione uma data válida.";
+        return null;
+    }
+
+    outErro.textContent = ""; // Limpa a mensagem de erro anterior
+
+    // Retorna apenas a parte de data (sem horas)
+    return dataSelecionada.toISOString().split("T")[0]; // Formato YYYY-MM-DD
+}
+
 function calcularInss() {
-    // Faixas e alíquotas de INSS
 
-    var inssFaixa1 = 1518
-    var inssFaixa2A = inssFaixa1 + 0.01
-    var inssFaixa2B = 2793.88
-    var inssFaixa3A = inssFaixa2B + 0.01
-    var inssFaixa3B = 4190.83
-    var inssFaixa4A = inssFaixa3B + 0.01
-    var inssFaixa4B = 8157.41
-
-    var aliqFaixa1 = 0.075
-    var aliqFaixa2 = 0.09
-    var aliqFaixa3 = 0.12
-    var aliqFaixa4 = 0.14
-
+    const inssFev2025 = [1518, 2793.88, 4190.83, 8157.41];
+    const faixaInssFev2025 = [0.075, 0.09, 0.12, 0.14];
+    const deducaoInssFev2025 = [0.00, 22.77, 106.60, 190.42];
     
-    var inssTeto = 951.63;
+    let inssTeto = 951.63;
 
     //-----------------------//
 
-    var inValor = document.getElementById("inValor");
-    var outCalculo = document.getElementById("outValorInss");
+    let inValor = document.getElementById("inValor");
+    let outInss = document.getElementById("outInss");
     
     // Converte o valor de entrada para número
-    var valor = Number(inValor.value);
+    let valor = Number(inValor.value);
     
 
     //Forçar usuário a digitar um valor numérico válido
     if (isNaN(valor) || valor == "" || valor <= 0) {
-        alert("Digite um valor válido para calcular a sua remuneração.");
+        const erroRemuneracao = document.getElementById("erroRemuneracao");
+        erroRemuneracao.textContent = "Digite um valor válido para calcular a sua remuneração.";
         inValor.focus();
         inValor.value = "";
-        outCalculo.value = "";
         return;
+    } else {
+        erroRemuneracao.textContent = "";
     }
 
-    var inss = 0;
-    
-    // Condições para o cálculo do INSS
-    if (valor > 0 && valor <= inssFaixa1) {
-        inss = valor * aliqFaixa1;
-        outValorInss.textContent = "INSS: R$ " + inss.toFixed(2);
-    } else if (valor > inssFaixa1 && valor <= inssFaixa2B) {
-        inss = ((valor - inssFaixa1) * aliqFaixa2) + (inssFaixa1 * aliqFaixa1);
-        outValorInss.textContent = "INSS: R$ " + inss.toFixed(2);
-    } else if (valor > inssFaixa2B && valor <= inssFaixa3B) {
-        inss = (inssFaixa1 * aliqFaixa1) + ((inssFaixa2B - inssFaixa1) * aliqFaixa2) + ((valor - inssFaixa2B) * aliqFaixa3);
-        outValorInss.textContent = "INSS: R$ " + inss.toFixed(2);
-    } else if (valor > inssFaixa3B && valor <= inssFaixa4B) {
-        inss = (inssFaixa1 * aliqFaixa1) + ((inssFaixa2B - inssFaixa1) * aliqFaixa2) + ((inssFaixa3B - inssFaixa2B) * aliqFaixa3) + ((valor - inssFaixa3B) * aliqFaixa4);
-        outValorInss.textContent = "INSS: R$ " + inss.toFixed(2);
-    } else if (valor > inssFaixa4B) {
-        inss = inssTeto;
-        outValorInss.textContent = "INSS: R$ " + inssTeto + " (teto máximo)";
+    //let valor = Number(inRemuneracao.value);
+    let valorInss = 0;
+
+    if (valor <= inssFev2025[0]){
+        valorInss += (valor * faixaInssFev2025[0]);
+        outInss.textContent = " INSS: R$ " + valorInss.toFixed(2);
+    } else if(valor > inssFev2025[0] && valor <= inssFev2025[1]){
+        valorInss += (valor * faixaInssFev2025[1] - deducaoInssFev2025[1]);
+        outInss.textContent = " INSS: R$ " + valorInss.toFixed(2);
+    }else if(valor > inssFev2025[1] && valor <= inssFev2025[2]){
+        valorInss += (valor * faixaInssFev2025[2] - deducaoInssFev2025[2]);
+        outInss.textContent = " INSS: R$ " + valorInss.toFixed(2);
+    } else if(valor > inssFev2025[2] && valor <= inssFev2025[3]){
+        valorInss += (valor * faixaInssFev2025[3] - deducaoInssFev2025[3]);
+        outInss.textContent = " INSS: R$ " + valorInss.toFixed(2);
+    } else if (valor > inssFev2025[3]){
+        valorInss+= 951.62
+        outInss.textContent = " INSS: R$ " + valorInss.toFixed(2);
     }
 
     //retorna valor do INSS para a função de cálculo de impostos.
-    return inss;
+    return valorInss;
 }
 
-function calcularIrrf() {
-    var outValorIr = document.getElementById("outValorIr");
-    var inValor = document.getElementById("inValor");
-    var valorIr = parseFloat(inValor.value);  // Obtém o valor do salário para cálculo do IRRF
-    let inss = calcularInss(); //Number(document.getElementById("outCalculo").textContent.replace("INSS: R$ ", "").replace(" (teto máximo)", "")); // Pega o INSS calculado
-    //var outDescIr = document.getElementById("outDescIr");
-    var valorLiq = document.getElementById("valorLiq");
-    var outValorLiq = document.getElementById("outValorLiq");
-    var inDependente = document.getElementById("inDependente");
-    var outValorInss = document.getElementById("outValorInss");
+function irrf2024() {
 
-    // Faixas e Alíquotas de IRRF.
+    const irrfFev2024 = [2259.60, 2826.65, 3751.05, 4664.68];
+    const faixaIrrfFev2024 = [0.075, 0.15, 0.225, 0.275];
+    const deducaoIrrfFev2024 = [169.44, 381.44, 662.77, 896.00];
 
-    var tabelaIrFaixa0 = 2259.60;
-    var tabelaIrFaixa1 = 2826.65;
-    var tabelaIrFaixa2 = 3751.05; 
-    var tabelaIrFaixa3 = 4664.68;
-    
-    var irrf = 0;
-    var faixaUmIr = 169.44;
-    var faixaDoisIr = 381.44;
-    var faixaTresIr = 662.77;
-    var faixaQuatroIr = 896.00;
+    let inss = calcularInss();
+    let outErro = document.querySelector(".outErro");
 
-    var qtDependente = inDependente.value;
-    var vlDependente = qtDependente * 189.59;
+    let outValorIr = document.getElementById("outValorIr");
+    let inValor = document.getElementById("inValor");
+    let valorIr = parseFloat(inValor.value);  // Obtém o valor do salário para cálculo do IRRF
 
-    var deducao = 0;
+    let valorLiq = document.getElementById("valorLiq");
+    let outValorLiq = document.getElementById("outValorLiq");
+    let inDependente = document.getElementById("inDependente");
+    let outValorInss = document.getElementById("outValorInss");
+
+    let qtDependente = inDependente.value;
+    let vlDependente = qtDependente * 189.59;
+
+    let deducao = 0;
     if ((inss + vlDependente) < 564.80){
         deducao = 564.80;
     }else {
@@ -94,7 +118,7 @@ function calcularIrrf() {
     }
 
     if (inDependente.value < 0 || inDependente.value > 10){
-        alert("A quantidade de dependentes não pode ser negativa ou maior que 10!");
+        outErro.textContent = ("A quantidade de dependentes não pode ser negativa ou maior que 10!");
         inDependente.value = 0;
         inValor.value = "";
         inDependente.focus();
@@ -107,83 +131,158 @@ function calcularIrrf() {
         qtDependente = inDependente.value;
     }*/
 
-    var novoValor = (inValor.value - deducao);
+    let base = (inValor.value - deducao);
+    let irrfValor = 0;
 
-    /*if(inValor.value < tabelaIrFaixa0){
-        outValorIr.textContent = "Você não teve desconto de IRRF";
-        valorLiq = (valorIr - inss - irrf);
-        outValorLiq.textContent = "Sua remuneração líquida é: R$ " + valorLiq.toFixed(2);
-    }*/
-
-    if (novoValor <= tabelaIrFaixa0) {
-        outValorIr.textContent = "Você não teve desconto de IRRF";
-        valorLiq = (valorIr - inss - irrf);
-        outValorLiq.textContent = "Sua remuneração líquida é: R$ " + valorLiq.toFixed(2);
-    } else if (novoValor >= (tabelaIrFaixa0 + 0.01) && novoValor <= tabelaIrFaixa1) {
-        irrf = ((valorIr - deducao) * 0.075) - faixaUmIr;
-        if (irrf < 0){
-            outValorIr.textContent = "Você não teve desconto de IRRF";
-            valorLiq = valorIr - inss - irrf;
-            outValorLiq.textContent = "Sua remuneração líquida é: R$ " + valorLiq.toFixed(2);
-        } else {
-            outValorIr.textContent = "IRRF: R$ " + irrf.toFixed(2) + "\n e foi utilizado o desconto: R$ " + deducao.toFixed(2);
-            valorLiq = valorIr - inss - irrf;
-            outValorLiq.textContent = "Sua remuneração líquida é: R$ " + valorLiq.toFixed(2);
-        }
-    } else if (novoValor >= tabelaIrFaixa1 + 0.01 && novoValor <= tabelaIrFaixa2) {
-        irrf = ((valorIr - deducao) * 0.15) - faixaDoisIr;
-        if (irrf < 0){
-            outValorIr.textContent = "Você não tem desconto de IRRF";
-            valorLiq = valorIr - inss - irrf;
-            outValorLiq.textContent = "Sua remuneração líquida é: R$ " + valorLiq.toFixed(2);
-        } else {
-            outValorIr.textContent = "IRRF: R$ " + irrf.toFixed(2) + "\n e foi utilizado o desconto: R$ " + deducao.toFixed(2);
-            valorLiq = valorIr - inss - irrf;
-            outValorLiq.textContent = "Sua remuneração líquida é: R$ " + valorLiq.toFixed(2);
-        }
-    } else if (novoValor >= tabelaIrFaixa2 + 0.01 && novoValor <= tabelaIrFaixa3) {
-        irrf = ((valorIr - deducao) * 0.225) - faixaTresIr;
-        outValorIr.textContent = "IRRF: R$ " + irrf.toFixed(2)+ "\n e foi utilizado o desconto: R$ " + deducao.toFixed(2);
-        valorLiq = valorIr - inss - irrf;
-        outValorLiq.textContent = "Sua remuneração líquida é: R$ " + valorLiq.toFixed(2);
-    } else if (novoValor >= tabelaIrFaixa3 + 0.01) {
-        irrf = ((valorIr - deducao) * 0.275) - faixaQuatroIr;
-        outValorIr.textContent = "IRRF: R$ " + irrf.toFixed(2)+ "\n e foi utilizado o desconto: R$ " + deducao.toFixed(2);
-        valorLiq = valorIr - inss - irrf;
-        outValorLiq.textContent = "Sua remuneração líquida é: R$ " + valorLiq.toFixed(2);
+    if(base <= irrfFev2024[0]){
+        outValorIr.textContent = "Sem desconto de IRRF";
+    } else if(base > irrfFev2024[0] && base <= irrfFev2024[1]){
+        irrfValor = (base * faixaIrrfFev2024[0]) - deducaoIrrfFev2024[0];
+        outValorIr.textContent = "IRRF: R$ " + irrfValor.toFixed(2) + "\n e foi utilizado o desconto: R$ " + deducao.toFixed(2);;
+    } else if(base >= irrfFev2024[1] && base <= irrfFev2024[2]){
+        irrfValor = (base * faixaIrrfFev2024[1]) - deducaoIrrfFev2024[1];
+        outValorIr.textContent = "IRRF: R$ " + irrfValor.toFixed(2) + "\n e foi utilizado o desconto: R$ " + deducao.toFixed(2);;
+    } else if(base > irrfFev2024[2] && base <= irrfFev2024[3]){
+        irrfValor = (base * faixaIrrfFev2024[2]) - deducaoIrrfFev2024[2];
+        outValorIr.textContent = "IRRF: R$ " + irrfValor.toFixed(2) + "\n e foi utilizado o desconto: R$ " + deducao.toFixed(2);;
+    } else if(base > irrfFev2024[3]){
+        irrfValor = (base * faixaIrrfFev2024[3]) - deducaoIrrfFev2024[3];
+        outValorIr.textContent = "IRRF: R$ " + irrfValor.toFixed(2) + "\n e foi utilizado o desconto: R$ " + deducao.toFixed(2);;
     }
 
     //Retorna valor do IRRF para a função cálculo de impostos.
-    return irrf;
-}
+    return irrfValor;
+    }
+
+function irrf2025() {
+    
+        const irrfMaio2025 = [2428.80, 2826.65, 3751.05, 4664.68];
+        const faixaIrrfMaio2025 = [0.075, 0.15, 0.225, 0.275];
+        const deducaoIrrfMaio2025 = [182.16, 394.16, 675.49, 908.73];
+    
+        let inss = calcularInss();
+        let outErro = document.querySelector(".outErro");
+    
+        let outValorIr = document.getElementById("outValorIr");
+        let inValor = document.getElementById("inValor");
+        //let valorIr = parseFloat(inValor.value);  // Obtém o valor do salário para cálculo do IRRF
+    
+        //let valorLiq = document.getElementById("valorLiq");
+        let outValorLiq = document.getElementById("outValorLiq");
+        let inDependente = document.getElementById("inDependente");
+        let outValorInss = document.getElementById("outValorInss");
+    
+        let qtDependente = inDependente.value;
+        let vlDependente = qtDependente * 189.59;
+    
+        let deducao = 0;
+        if ((inss + vlDependente) < 607.20){
+            deducao = 607.20;
+        }else {
+            deducao = (inss + vlDependente);
+        }
+    
+        if (inDependente.value < 0 || inDependente.value > 10){
+            outErro.textContent = ("A quantidade de dependentes não pode ser negativa ou maior que 10!");
+            inDependente.value = 0;
+            inValor.value = "";
+            inDependente.focus();
+            outValorInss.textContent = "";
+            outValorIr.textContent = "";
+            outFgts.textContent = "";
+            outValorLiq.textContent = "";
+            return;
+        } /*else {
+            qtDependente = inDependente.value;
+        }*/
+    
+        let base = (inValor.value - deducao);
+        let irrfValor = 0;
+    
+        if(base <= irrfMaio2025[0]){
+            outValorIr.textContent = "Sem desconto de IRRF";
+        } else if(base > irrfMaio2025[0] && base <= irrfMaio2025[1]){
+            irrfValor = (base * faixaIrrfMaio2025[0]) - deducaoIrrfMaio2025[0];
+            outValorIr.textContent = "IRRF: R$ " + irrfValor.toFixed(2) + "\n e foi utilizado o desconto: R$ " + deducao.toFixed(2);;
+        } else if(base >= irrfMaio2025[1] && base <= irrfMaio2025[2]){
+            irrfValor = (base * faixaIrrfMaio2025[1]) - deducaoIrrfMaio2025[1];
+            outValorIr.textContent = "IRRF: R$ " + irrfValor.toFixed(2) + "\n e foi utilizado o desconto: R$ " + deducao.toFixed(2);;
+        } else if(base > irrfMaio2025[2] && base <= irrfMaio2025[3]){
+            irrfValor = (base * faixaIrrfMaio2025[2]) - deducaoIrrfMaio2025[2];
+            outValorIr.textContent = "IRRF: R$ " + irrfValor.toFixed(2) + "\n e foi utilizado o desconto: R$ " + deducao.toFixed(2);;
+        } else if(base > irrfMaio2025[3]){
+            irrfValor = (base * faixaIrrfMaio2025[3]) - deducaoIrrfMaio2025[3];
+            outValorIr.textContent = "IRRF: R$ " + irrfValor.toFixed(2) + "\n e foi utilizado o desconto: R$ " + deducao.toFixed(2);;
+        }
+    
+        //Retorna valor do IRRF para a função cálculo de impostos.
+        return irrfValor;
+    }
+
+    function irrf() {
+        const data = dataReferencia(); // Captura a data selecionada
+        const outValorIr = document.getElementById("outValorIr"); // Elemento para exibir resultado
+    
+        // Verifica se a data foi retornada corretamente
+        if (!data) {
+            console.error("Data inválida ou não selecionada.");
+            return;
+        }
+    
+        const dataCorte = "2025-04-30"; // Define a data limite como string no formato "YYYY-MM-DD"
+        let irrfValor = 0;
+    
+        // Compara a data capturada com a data limite
+        if (data <= dataCorte) {
+            irrfValor = irrf2024(); // Usa a tabela de 2024
+        } else {
+            irrfValor = irrf2025(); // Usa a tabela de 2025
+        }
+    
+        // Exibe o valor calculado no campo de saída
+        if (outValorIr) {
+            outValorIr.textContent = "IRRF: R$ " + irrfValor.toFixed(2);
+        } else {
+            console.error("Elemento 'outValorIr' não encontrado na DOM.");
+        }
+    }
 
 function calcularFgts(){
-    var inValor = document.getElementById("inValor");
-    var outFgts = document.getElementById("outFgts");
+    let inValor = document.getElementById("inValor");
+    let outFgts = document.getElementById("outFgts");
 
-    var remuneracao = Number(inValor.value);
+    let remuneracao = Number(inValor.value);
 
     if (isNaN(remuneracao) || inValor == "" || remuneracao <= 0) {
         inValor.focus();
         return;
     }
 
-    var fgts = remuneracao * 0.08;
+    let fgts = remuneracao * 0.08;
 
-    outFgts.textContent = "O valor do seu FGTS é de: R$ " + fgts.toFixed(2);
+    outFgts.textContent = "FGTS: R$ " + fgts.toFixed(2);
 
     //retorna valor do FGTS para a função de cálculo de impostos.
     return fgts;
 }
 
-function calcularImpostos(){
+function calcularImpostos() {
+    // Valida a data antes de continuar
+    const referencia = dataReferencia();
+    if (!referencia) {
+        return; // Interrompe caso a data seja inválida
+    }
+
+    // Executa os cálculos
     calcularInss();
-    calcularIrrf();
+    irrf();
     calcularFgts();
+
+    // Limpa os campos de entrada para nova utilização
     inValor.value = "";
     inDependente.value = "";
     inValor.focus();
 }
 
-var btCalcularImpostos = document.getElementById("btCalcularImpostos");
+const btCalcularImpostos = document.getElementById("btCalcularImpostos");
 btCalcularImpostos.addEventListener("click", calcularImpostos);
