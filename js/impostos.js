@@ -84,36 +84,58 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function calcularIRRF(salarioBruto, valorInss, numDependentes, tabelaIrrf) {
-        if (!tabelaIrrf) return { valor: 0, baseCalculo: 0, usouSimplificado: false };
-        const deducaoDependentes = numDependentes * tabelaIrrf.deducao_por_dependente;
-        let baseCalculoFinal, usouSimplificado = false;
-        const baseCalculoPadrao = salarioBruto - valorInss - deducaoDependentes;
-        const deducaoSimplificada = parseFloat(tabelaIrrf.deducao_simplificada);
-        if (deducaoSimplificada > 0) {
-            const baseCalculoSimplificada = salarioBruto - deducaoSimplificada;
-            if (baseCalculoSimplificada < baseCalculoPadrao) {
-                baseCalculoFinal = baseCalculoSimplificada;
-                usouSimplificado = true;
-            } else {
-                baseCalculoFinal = baseCalculoPadrao;
-            }
+    if (!tabelaIrrf) return { valor: 0, baseCalculo: 0, usouSimplificado: false };
+
+    const deducaoDependentes = numDependentes * tabelaIrrf.deducao_por_dependente;
+    let baseCalculoFinal, usouSimplificado = false;
+    
+    // Escolha da melhor base (Padrão vs Simplificada)
+    const baseCalculoPadrao = Math.max(0, salarioBruto - valorInss - deducaoDependentes);
+    const deducaoSimplificada = parseFloat(tabelaIrrf.deducao_simplificada || 0);
+
+    if (deducaoSimplificada > 0) {
+        const baseCalculoSimplificada = Math.max(0, salarioBruto - deducaoSimplificada);
+        if (baseCalculoSimplificada < baseCalculoPadrao) {
+            baseCalculoFinal = baseCalculoSimplificada;
+            usouSimplificado = true;
         } else {
             baseCalculoFinal = baseCalculoPadrao;
         }
-        if (baseCalculoFinal < 0) baseCalculoFinal = 0;
-        let irrfValor = 0;
-        for (const faixa of tabelaIrrf.faixas) {
-            if (faixa.base_calculo_ate === 'acima' || baseCalculoFinal <= faixa.base_calculo_ate) {
-                irrfValor = (baseCalculoFinal * (faixa.aliquota / 100)) - faixa.parcela_a_deduzir;
-                break;
-            }
-        }
-        return {
-            valor: parseFloat(Math.max(0, irrfValor).toFixed(2)),
-            baseCalculo: parseFloat(baseCalculoFinal.toFixed(2)),
-            usouSimplificado: usouSimplificado
-        };
+    } else {
+        baseCalculoFinal = baseCalculoPadrao;
     }
+
+    // Cálculo base pela tabela progressiva
+    let irrfValor = 0;
+    for (const faixa of tabelaIrrf.faixas) {
+        if (faixa.base_calculo_ate === 'acima' || baseCalculoFinal <= faixa.base_calculo_ate) {
+            irrfValor = (baseCalculoFinal * (faixa.aliquota / 100)) - faixa.parcela_a_deduzir;
+            break;
+        }
+    }
+
+    
+    if (tabelaIrrf.regra_isencao_5mil && irrfValor > 0) {
+        const r = tabelaIrrf.regra_isencao_5mil;
+        let valorRedutor = 0;
+
+        if (salarioBruto <= r.limite) {
+            // Isenção total: redutor anula o imposto
+            valorRedutor = irrfValor; 
+        } else if (salarioBruto <= r.limite_transicao) {
+            // Cálculo da dedução linear/gradual (Fórmula GOV 2026)
+            valorRedutor = 978.62 - (0.133145 * salarioBruto);
+        }
+
+        irrfValor = Math.max(0, irrfValor - valorRedutor);
+    }
+
+    return {
+        valor: parseFloat(irrfValor.toFixed(2)),
+        baseCalculo: parseFloat(baseCalculoFinal.toFixed(2)),
+        usouSimplificado: usouSimplificado
+    };
+}
 
     function calcularFGTS(salarioBruto) {
         return parseFloat((salarioBruto * 0.08).toFixed(2));
