@@ -89,7 +89,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const deducaoDependentes = numDependentes * tabelaIrrf.deducao_por_dependente;
     let baseCalculoFinal, usouSimplificado = false;
     
-    // Escolha da melhor base (Padrão vs Simplificada)
     const baseCalculoPadrao = Math.max(0, salarioBruto - valorInss - deducaoDependentes);
     const deducaoSimplificada = parseFloat(tabelaIrrf.deducao_simplificada || 0);
 
@@ -105,7 +104,6 @@ document.addEventListener("DOMContentLoaded", function () {
         baseCalculoFinal = baseCalculoPadrao;
     }
 
-    // Cálculo base pela tabela progressiva
     let irrfValor = 0;
     for (const faixa of tabelaIrrf.faixas) {
         if (faixa.base_calculo_ate === 'acima' || baseCalculoFinal <= faixa.base_calculo_ate) {
@@ -114,19 +112,17 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    
+    // --- BLOCO DA NOVA REGRA 2026 ---
     if (tabelaIrrf.regra_isencao_5mil && irrfValor > 0) {
         const r = tabelaIrrf.regra_isencao_5mil;
         let valorRedutor = 0;
 
         if (salarioBruto <= r.limite) {
-            // Isenção total: redutor anula o imposto
             valorRedutor = irrfValor; 
         } else if (salarioBruto <= r.limite_transicao) {
-            // Cálculo da dedução linear/gradual (Fórmula GOV 2026)
+            // Fórmula do Redutor Linear
             valorRedutor = 978.62 - (0.133145 * salarioBruto);
         }
-
         irrfValor = Math.max(0, irrfValor - valorRedutor);
     }
 
