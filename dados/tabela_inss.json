@@ -1,8 +1,8 @@
 {
     "inss_tabelas": [
-      {"vigencia": "A partir de 01/01/2025", "progressiva": true, "teto_salarial": 8157.41, "faixas": [{"salario_ate": 1518.0, "aliquota": 7.5}, {"salario_ate": 2793.88,
-        "aliquota": 9.0},{"salario_ate": 4190.83, "aliquota": 12.0}, {"salario_ate": 8157.41,"aliquota": 14.0}]},
-        {"vigencia": "De 01/01/2023 a 31/12/2024", "progressiva": true, "teto_salarial": 7786.02, "faixas": [{"salario_ate": 1412.00,"aliquota": 7.5},{"salario_ate": 2666.68,"aliquota": 9.0},{"salario_ate": 4000.03,"aliquota": 12.0},{"salario_ate": 7786.02,"aliquota": 14.0}]},
+      {"vigencia": "De 01/01/2026 a 31/12/2026","progressiva": true,"teto_salarial": 8475.55,"faixas": [{ "salario_ate": 1621.0, "aliquota": 7.5 },{ "salario_ate": 2902.84, "aliquota": 9.0 },{ "salario_ate": 4354.27, "aliquota": 12.0 },{ "salario_ate": 8475.55, "aliquota": 14.0 }]},
+      {"vigencia": "De 01/01/2025 a 31/12/2025","progressiva": true,"teto_salarial": 8157.41,"faixas": [{ "salario_ate": 1518.0, "aliquota": 7.5 },{ "salario_ate": 2793.88, "aliquota": 9.0 },{ "salario_ate": 4190.83, "aliquota": 12.0 },{ "salario_ate": 8157.41, "aliquota": 14.0 }]},
+      {"vigencia": "De 01/01/2023 a 31/12/2024", "progressiva": true, "teto_salarial": 7786.02, "faixas": [{"salario_ate": 1412.00,"aliquota": 7.5},{"salario_ate": 2666.68,"aliquota": 9.0},{"salario_ate": 4000.03,"aliquota": 12.0},{"salario_ate": 7786.02,"aliquota": 14.0}]},
       { "vigencia": "De 01/05/2023 a 31/12/2023", "progressiva": true, "teto_salarial": 7507.49, "faixas": [{ "salario_ate": 1320.00, "aliquota": 7.5 }, { "salario_ate": 2571.29, "aliquota": 9.0 }, { "salario_ate": 3856.94, "aliquota": 12.0 }, { "salario_ate": 7507.49, "aliquota": 14.0 }] },
       { "vigencia": "De 01/01/2023 a 30/04/2023", "progressiva": true, "teto_salarial": 7507.49, "faixas": [{ "salario_ate": 1302.00, "aliquota": 7.5 }, { "salario_ate": 2571.29, "aliquota": 9.0 }, { "salario_ate": 3856.94, "aliquota": 12.0 }, { "salario_ate": 7507.49, "aliquota": 14.0 }] },
       { "vigencia": "De 01/01/2022 a 31/12/2022", "progressiva": true, "teto_salarial": 7087.22, "faixas": [{ "salario_ate": 1212.00, "aliquota": 7.5 }, { "salario_ate": 2427.35, "aliquota": 9.0 }, { "salario_ate": 3641.03, "aliquota": 12.0 }, { "salario_ate": 7087.22, "aliquota": 14.0 }] },
